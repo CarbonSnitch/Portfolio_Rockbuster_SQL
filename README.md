@@ -24,5 +24,6 @@
 
 - SQL finalized database
 - Data Dictionary
+[Data Dictionary](Rockbuster_sent_to_client/Rockbuster_Data_Dictionary.pdf)
 - Presentation of findings
 - Final answers and data-driven suggestions
