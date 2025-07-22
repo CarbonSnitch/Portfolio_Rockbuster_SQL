@@ -23,7 +23,6 @@
 [Tableau Link 3](Rockbuster_sent_to_client/Rockbuster_Tableau_top_cust.lnk)
 
 - SQL finalized database
-- Data Dictionary
-[Data Dictionary](Rockbuster_sent_to_client/Rockbuster_Data_Dictionary.pdf)
+- [Data Dictionary](Rockbuster_sent_to_client/Rockbuster_Data_Dictionary.pdf)
 - Presentation of findings
 - Final answers and data-driven suggestions
