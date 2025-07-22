@@ -17,7 +17,7 @@
 - Do sales figures vary between geographic regions?
 
 ## Project Deliverables
-[Final Presentation with Tableau links](/Rockbuster_sent_to_client/Rockbuster_presentation_RGN.pdf)
+[Final Presentation with Tableau links](Rockbuster_sent_to_client/Rockbuster_Presentation_RGN.pdf)
 
 - SQL finalized database
 - Data Dictionary
