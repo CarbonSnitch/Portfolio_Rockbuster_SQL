@@ -1,0 +1,32 @@
+CREATE (Insert, Alter), READ (Select From, Where), UPDATE, DELETE (Drop)
+
+SELECT film_id, title FROM film
+
+SELECT *
+FROM film
+
+SELECT *
+FROM film
+WHERE rental_rate < 1.99
+
+UPDATE film
+SET release_year = 1999
+WHERE title = 'The Matrix'
+
+DELETE
+FROM film
+WHERE title ='The Avengers:End Game'
+
+-- select and display all columns from the film table for only 10 records
+SELECT *
+FROM film
+LIMIT 10;
+
+  CREATE TABLE category
+(
+  category_id integer NOT NULL DEFAULT nextval('category_category_id_seq'::regclass),
+  name text COLLATE pg_catalog."default" NOT NULL,
+  last_update timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT category_pkey PRIMARY KEY (category_id)
+);
+
