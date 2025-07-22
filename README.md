@@ -18,7 +18,9 @@
 
 ## Project Deliverables
 [Final Presentation](Rockbuster_sent_to_client/Rockbuster_Presentation_RGN.pdf)
-[Tableau Links](
+[Tableau Link 1](Rockbuster_sent_to_client/Rockbuster_Tableau_Top_genres.lnk)
+[Tableau Link 2](Rockbuster_sent_to_client/Rockbuster_Tableau_cust_world.lnk)
+[Tableau Link 3](Rockbuster_sent_to_client/Rockbuster_Tableau_top_cust.lnk)
 
 - SQL finalized database
 - Data Dictionary
