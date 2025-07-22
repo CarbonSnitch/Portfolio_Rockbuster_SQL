@@ -30,3 +30,109 @@ LIMIT 10;
   CONSTRAINT category_pkey PRIMARY KEY (category_id)
 );
 
+Find the average amount paid by the top 5 customers
+-- CTE 1: Find the top 10 countries by customer count
+WITH TopCountries AS
+(SELECT D.country
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_id = D.country_id
+GROUP BY D.country
+ORDER BY COUNT (A.customer_id) DESC
+LIMIT 10),
+
+-- CTE 2: Find the top 10 cities (by customer count) located within those top countries.
+TopCities AS
+(SELECT C.city
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_id = D.country_id
+-- Filter for countries identified in our first CTE
+WHERE D.country IN (SELECT country FROM TopCountries)
+GROUP BY D.country, C.city
+ORDER BY COUNT (A.customer_id) DESC
+LIMIT 10),
+
+-- CTE 3: Find the total spending for each customer in those top cities, and then select the top 5 highest
+spenders from that group.
+Top5Customers AS (
+SELECT SUM (E.amount) AS total_amount_paid
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_id = D.country_id
+INNER JOIN payment E ON A.customer_id = E.customer_id
+-- Filter for customers living in the cities from the second CTE
+WHERE C.city IN (SELECT city FROM TopCities)
+GROUP BY A.customer_id, A.first_name, A.last_name, C.city, D.country
+ORDER BY total_amount_paid DESC
+LIMIT 5)
+
+-- CTE 1: Identify the top 10 countries by customer count.
+WITH TopCountries AS
+(SELECT D.country_id, D.country
+FROM customer A
+JOIN address B ON A.address_id = B.address_id
+JOIN city C ON B.city_id = C.city_id
+JOIN country D ON C.country_id = D.country_id
+GROUP BY D.country_id, D.country
+ORDER BY COUNT(A.customer_id) DESC
+LIMIT 10),
+
+-- CTE 2: Identify the top 10 cities by customer count, but only from within the TopCountries.
+TopCities AS
+(SELECT C.city_id
+FROM customer A
+JOIN address B ON A.address_id = B.address_id
+JOIN city C ON B.city_id = C.city_id
+JOIN TopCountries tc ON C.country_id = tc.country_id
+GROUP BY C.city_id
+ORDER BY COUNT(A.customer_id) DESC
+LIMIT 10),
+
+-- CTE 3: Identify the top 5 overall spending customers who live in one of the TopCities.
+TopCustomers AS
+(SELECT A.customer_id, D.country
+FROM payment E
+JOIN customer A ON E.customer_id = A.customer_id
+JOIN address B ON A.address_id = B.address_id
+JOIN city C ON B.city_id = C.city_id
+JOIN country D ON C.country_id = D.country_id
+JOIN TopCities tci ON C.city_id = tci.city_idGROUP BY A.customer_id, D.country
+ORDER BY SUM(E.amount) DESC
+LIMIT 5)
+
+
+Top 5 customers from the top 10 cities who’ve paid the highest total amounts to Rockbuster
+
+-- A=payment B=customer C=address D=city E=country
+SELECT A.customer_id, A.first_name, A.last_name, c.city, d.country, SUM(amount) AS
+total_amount_paid
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON b.city_id = c.city_id
+INNER JOIN country D ON c.country_id = d.country_id
+INNER JOIN payment E ON A.customer_id = E.customer_id
+WHERE c.city IN
+(SELECT C.city
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D on C.country_id = D.country_id
+WHERE D.country IN
+(SELECT D.country
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D on C.country_id = D.country_id
+GROUP BY country
+ORDER BY COUNT (customer_id) DESC
+LIMIT 10)
+GROUP BY D.country, C.city
+ORDER BY COUNT (customer_id) DESC
+LIMIT 10)
+GROUP BY A.customer_id, A.first_name, A.last_name, c.city, d.countryORDER BY total_amount_paid DESC
+LIMIT 5
+
